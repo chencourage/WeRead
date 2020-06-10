@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.weread.common.model.Response;
 import com.weread.common.utils.RandomUtil;
 import com.weread.common.utils.SpringContextUtil;
+import com.weread.service.sys.entity.SysUser;
+import com.weread.service.sys.service.ISysUserService;
 import com.weread.web.model.LoginResponse;
 
 import io.jsonwebtoken.Jwts;
@@ -32,19 +34,18 @@ public class JwtHelper {
 	
 	public static Response<LoginResponse> loginSuccess(String userId){
 		LoginResponse resp = new LoginResponse(userId,null);
-//		EntityWrapper<Merchant> wrapper = new EntityWrapper<>();
-//		wrapper.eq("customer_id", userId);
-//		wrapper.setSqlSelect("id");
-//		Merchant merchant = SpringContextUtil.getBean(IMerchantService.class).selectOne(wrapper);
-//		if(merchant!=null) {
-//			resp.setIsEnter("1");
-//		}else {
-//			resp.setIsEnter("0");
-//		}
-//		String merchantId = merchant!=null?merchant.getId().toString():"-1";
+		EntityWrapper<SysUser> wrapper = new EntityWrapper<>();
+		wrapper.eq("id", userId);
+		SysUser sysUser = SpringContextUtil.getBean(ISysUserService.class).selectOne(wrapper);
+		if(sysUser!=null) {
+			resp.setIsEnter("1");
+		}else {
+			resp.setIsEnter("0");
+		}
+		String sysId = sysUser.getSysId().toString();
 		String token = Jwts.builder()
                 .setSubject(userId)
-                //.setAudience(merchantId)
+                .setAudience(sysId)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME_MS))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();

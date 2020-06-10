@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.StandardEnvironment;
 
-@Configuration
+//@Configuration
 public class WebServerConfiguration {
 	
 	AprLifecycleListener arpLifecycle = null;

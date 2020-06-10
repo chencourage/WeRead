@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2020-06-05 19:05:19
+Date: 2020-06-10 11:30:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -38,3 +38,24 @@ CREATE TABLE `read_book` (
   `read_state` varchar(10) DEFAULT NULL COMMENT '阅读状态01:允许阅读,02不允许',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户编号',
+  `sys_id` varchar(64) NOT NULL COMMENT '系统编码',
+  `login_name` varchar(255) NOT NULL COMMENT '登录名称',
+  `password` varchar(255) DEFAULT NULL COMMENT '密码',
+  `phone` varchar(11) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(50) DEFAULT NULL COMMENT '邮箱',
+  `name` varchar(50) DEFAULT NULL COMMENT '姓名',
+  `nick_name` varchar(50) DEFAULT NULL COMMENT '昵称',
+  `sex` varchar(4) DEFAULT NULL COMMENT '性别',
+  `status` varchar(10) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `vip_status` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

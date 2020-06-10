@@ -32,7 +32,7 @@ public class Generator {
 		gc.setBaseResultMap(false);// XML ResultMap
 		gc.setBaseColumnList(false);// XML columList
 		gc.setOpen(false);
-		gc.setAuthor("Weiqd");
+		gc.setAuthor("Chenk");
 		// 自定义文件命名，注意 %s 会自动填充表实体属性！
 		// gc.setMapperName("%sDao");
 		// gc.setXmlName("%sDao");
@@ -42,30 +42,35 @@ public class Generator {
 		mpg.setGlobalConfig(gc);
 		// 数据源配置
 		DataSourceConfig dsc = new DataSourceConfig();
-		dsc.setDbType(DbType.ORACLE);
-		dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
-		dsc.setUsername("yst_manager");
-		dsc.setPassword("yst_manager");
-		dsc.setUrl("jdbc:oracle:thin:@10.213.40.31:1521:mobile");
+//		dsc.setDbType(DbType.ORACLE);
+//		dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
+//		dsc.setUsername("yst_manager");
+//		dsc.setPassword("yst_manager");
+//		dsc.setUrl("jdbc:oracle:thin:@10.213.40.31:1521:mobile");
+		dsc.setDbType(DbType.MYSQL);
+		dsc.setDriverName("com.mysql.jdbc.Driver");
+		dsc.setUsername("root");
+		dsc.setPassword("root");
+		dsc.setUrl("jdbc:mysql://127.0.0.1:3306/readworld?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC");
 		mpg.setDataSource(dsc);
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 		// strategy.setTablePrefix("sys_");// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "MEMBER_BUY_INFO","MEMBER_PACKAGE","MEMBER_PACKAGE_PERIOD"}); // 需要生成的表
+		strategy.setInclude(new String[] { "read_book","sys_user"}); // 需要生成的表
 //		strategy.setTablePrefix(new String[] { "sys_" });// 此处可以修改为您的表前缀
 //		 strategy.setExclude(new String[]{"sys_role_menu","sys_role_user"}); // 排除生成的表
 		// 自定义实体父类
-		strategy.setSuperEntityClass("com.ysepay.framework.core.base.BaseEntity");
+		strategy.setSuperEntityClass("com.weread.service.base.BaseEntity");
 		// 自定义实体，公共字段
 //		strategy.setSuperEntityColumns(
 //				new String[] { "del_flag","remarks", "create_by", "create_date", "update_by", "update_date" });
 		// 自定义 mapper 父类
 //		strategy.setSuperMapperClass("org.ibase4j.core.base.BaseMapper");
 		// 自定义 service 父类
-		strategy.setSuperServiceClass("com.ysepay.framework.base.IBaseService");
+		strategy.setSuperServiceClass("com.weread.service.base.IBaseService");
 		// 自定义 service 实现类父类
-		strategy.setSuperServiceImplClass("com.ysepay.framework.base.BaseService");
+		strategy.setSuperServiceImplClass("com.weread.service.base.BaseService");
 		// 自定义 controller 父类
 //		strategy.setSuperControllerClass("org.ibase4j.core.base.AbstractController");
 		// 【实体】是否生成字段常量（默认 false）
@@ -77,7 +82,7 @@ public class Generator {
 		mpg.setStrategy(strategy);
 		// 包配置
 		PackageConfig pc = new PackageConfig();
-		pc.setParent("com.ysepay.member");
+		pc.setParent("com.weread.sys");
 		pc.setEntity("entity");
 		pc.setMapper("mapper");
 		pc.setXml("mapper.xml");
