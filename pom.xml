@@ -13,7 +13,6 @@
 		<mybatis-plus.version>2.1-gamma</mybatis-plus.version>
 		<druid.version>1.1.2</druid.version>
 		<fastjson.version>1.2.36</fastjson.version>
-		<!-- <shiro.version>1.2.4</shiro.version> -->
 		<quartz.version>2.2.3</quartz.version>
 		<java.version>1.8</java.version>
 	</properties>
@@ -63,6 +62,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>sharding-jdbc-core</artifactId>
+            <version>1.5.4</version>
+        </dependency>
         <dependency>
              <groupId>javax.servlet</groupId>
              <artifactId>jstl</artifactId>
@@ -105,6 +109,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.8</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
