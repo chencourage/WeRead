@@ -51,13 +51,13 @@ public class Generator {
 		dsc.setDriverName("com.mysql.jdbc.Driver");
 		dsc.setUsername("root");
 		dsc.setPassword("root");
-		dsc.setUrl("jdbc:mysql://127.0.0.1:3306/novel_plus?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC");
+		dsc.setUrl("jdbc:mysql://127.0.0.1:3306/readworld?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC");
 		mpg.setDataSource(dsc);
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 		// strategy.setTablePrefix("sys_");// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "author","author_code","author_income","author_income_detail","book","book_author","book_category","book_comment","book_comment_reply","book_content","book_index","book_screen_bullet","book_setting","crawl_batch_task","crawl_single_task","crawl_source","friend_link","news","news_category","order_pay","sys_data_perm","sys_dept","sys_dict","sys_file","sys_gen_columns","sys_gen_table","sys_gen_table_column","sys_log","sys_menu","sys_role","sys_role_data_perm","sys_role_menu","sys_user","sys_user_role","user","user_bookshelf","user_buy_record","user_feedback","user_read_history"}); // 需要生成的表
+		strategy.setInclude(new String[] { "read_book","sys_user"}); // 需要生成的表
 //		strategy.setTablePrefix(new String[] { "sys_" });// 此处可以修改为您的表前缀
 //		 strategy.setExclude(new String[]{"sys_role_menu","sys_role_user"}); // 排除生成的表
 		// 自定义实体父类
@@ -82,7 +82,7 @@ public class Generator {
 		mpg.setStrategy(strategy);
 		// 包配置
 		PackageConfig pc = new PackageConfig();
-		pc.setParent("com.weread.service.read");
+		pc.setParent("com.weread.sys");
 		pc.setEntity("entity");
 		pc.setMapper("mapper");
 		pc.setXml("mapper.xml");
