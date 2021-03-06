@@ -1,7 +1,10 @@
 package com.weread.service.read.mapper;
 
-import com.weread.service.read.entity.BookSetting;
+import java.util.List;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.weread.service.read.entity.BookSetting;
+import com.weread.service.read.vo.BookSettingVO;
 
 /**
  * <p>
@@ -12,5 +15,11 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2021-02-28
  */
 public interface BookSettingMapper extends BaseMapper<BookSetting> {
+	
+	/**
+	 * 查询首页设置
+	 * @return
+	 */
+	public List<BookSettingVO> listVO();
 
 }

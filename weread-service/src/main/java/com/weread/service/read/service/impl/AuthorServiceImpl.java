@@ -1,16 +1,21 @@
 package com.weread.service.read.service.impl;
 
-import com.weread.service.read.entity.Author;
-import com.weread.service.read.entity.AuthorIncome;
-import com.weread.service.read.entity.AuthorIncomeDetail;
-import com.weread.service.read.mapper.AuthorMapper;
-import com.weread.service.read.service.IAuthorService;
-import com.weread.service.base.BaseService;
-
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.weread.service.base.BaseService;
+import com.weread.service.read.entity.Author;
+import com.weread.service.read.entity.AuthorCode;
+import com.weread.service.read.entity.AuthorIncome;
+import com.weread.service.read.entity.AuthorIncomeDetail;
+import com.weread.service.read.mapper.AuthorMapper;
+import com.weread.service.read.service.IAuthorCodeService;
+import com.weread.service.read.service.IAuthorService;
 
 /**
  * <p>
@@ -22,34 +27,75 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AuthorServiceImpl extends BaseService<AuthorMapper, Author> implements IAuthorService {
+	
+	@Autowired
+	private IAuthorCodeService authorCodeService;
 
+	/**
+	 * 判断作者笔名
+	 */
 	@Override
 	public Boolean checkPenName(String penName) {
-		return null;
+		EntityWrapper<Author> autherWrapper = new EntityWrapper<Author>();
+		autherWrapper.eq("pen_name", penName);
+		int res = selectCount(autherWrapper);
+		if(res>0) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public String register(Long userId, Author author) {
-		// TODO Auto-generated method stub
-		return null;
+		//判断邀请码是否存在
+		Date currentDate = new Date();
+		Wrapper<AuthorCode> authorCodeWrapper = new EntityWrapper<AuthorCode>();
+		authorCodeWrapper.eq("invite_code", author.getInviteCode());
+		authorCodeWrapper.eq("is_use", "0");
+		authorCodeWrapper.gt("validity_time", currentDate);
+		int countCode = authorCodeService.selectCount(authorCodeWrapper);
+		if(countCode>0) {
+			//邀请码有效
+			author.setUserId(userId);
+            author.setCreateTime(currentDate);
+            this.insert(author);
+            
+            //修改邀请码已使用
+            AuthorCode authorCode = new AuthorCode();
+            authorCode.setIsUse(1);//已使用
+            authorCodeWrapper = new EntityWrapper<AuthorCode>();
+            authorCodeWrapper.eq("invite_code", author.getInviteCode());
+            authorCodeService.update(authorCode, authorCodeWrapper);
+            
+            return "";
+		}else {
+			//邀请码无效
+			return "邀请码无效！";
+		}
 	}
 
 	@Override
 	public Boolean isAuthor(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		Author author = this.selectById(userId);
+		if(null!=author) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	public Author queryAuthor(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.selectById(userId);
 	}
 
 	@Override
 	public List<Author> queryAuthorList(int limit, Date maxAuthorCreateTime) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityWrapper<Author> autherWrapper = new EntityWrapper<Author>();
+		autherWrapper.lt("create_time", maxAuthorCreateTime);
+		autherWrapper.orderBy("create_time", false);
+		autherWrapper.last("limit "+limit);
+		return selectList(autherWrapper);
 	}
 
 	@Override

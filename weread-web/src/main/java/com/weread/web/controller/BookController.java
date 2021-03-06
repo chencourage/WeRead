@@ -23,6 +23,7 @@ import com.java2nb.novel.entity.BookComment;
 import com.java2nb.novel.search.BookSP;
 import com.java2nb.novel.service.BookService;
 import com.java2nb.novel.vo.BookVO;
+import com.weread.service.read.service.IBookService;
 
 /**
  * @author 11797
@@ -32,15 +33,8 @@ import com.java2nb.novel.vo.BookVO;
 public class BookController extends BaseController{
 
 	@Autowired
-    private BookService bookService;
+    private IBookService bookService;
 	
-	@Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Value("${spring.rabbitmq.enable}")
-    private Integer enableMq;
-
-
     /**
      * 查询首页小说设置列表数据
      * @throws Exception 
