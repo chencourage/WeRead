@@ -13,8 +13,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.weread.common.base.PropertyUtil;
 import com.weread.common.base.SystemConfig;
 import com.weread.common.desensitize.DesensitionUtil;
-import com.weread.common.exception.YSAssert;
-import com.weread.common.exception.YSException;
+import com.weread.common.exception.REDAssert;
+import com.weread.common.exception.REDException;
 import com.weread.common.redis.IRedisService;
 import com.weread.common.utils.BizThreadUtil;
 import com.weread.common.utils.DataFormCheck;
@@ -47,11 +47,11 @@ public class ShortMsgManager {
 	 * @return
 	 */
 	public static boolean verifySms(String userCode, String phone, String smsCode, ShortMsgFuncEnum func) {
-		YSAssert.notBlank(userCode, "用户号不能为空");
-		YSAssert.notBlank(phone, "手机号不能为空");
-		YSAssert.notBlank(smsCode, "短信验证码不能为空");
-		YSAssert.notNull(func, "功能代码不能为空");
-		YSAssert.isTrue(DataFormCheck.isPhone(phone), "手机号格式不正确");
+		REDAssert.notBlank(userCode, "用户号不能为空");
+		REDAssert.notBlank(phone, "手机号不能为空");
+		REDAssert.notBlank(smsCode, "短信验证码不能为空");
+		REDAssert.notNull(func, "功能代码不能为空");
+		REDAssert.isTrue(DataFormCheck.isPhone(phone), "手机号格式不正确");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("busiCode", func.getCode());
 		params.put("mobile",  phone);
@@ -100,10 +100,10 @@ public class ShortMsgManager {
 	 * @return
 	 */
 	public static boolean sendSms(String userCode, String phone, ShortMsgFuncEnum func, Object ... arguments) {
-		YSAssert.notBlank(userCode, "用户号不能为空");
-		YSAssert.notBlank(phone, "手机号不能为空");
-		YSAssert.notNull(func, "功能代码不能为空");
-		YSAssert.isTrue(DataFormCheck.isPhone(phone), "手机号格式不正确");
+		REDAssert.notBlank(userCode, "用户号不能为空");
+		REDAssert.notBlank(phone, "手机号不能为空");
+		REDAssert.notNull(func, "功能代码不能为空");
+		REDAssert.isTrue(DataFormCheck.isPhone(phone), "手机号格式不正确");
 		try {
 			if(func.needValideCode) {
 				return sendSmsCode(userCode, phone, func, arguments);
@@ -233,7 +233,7 @@ public class ShortMsgManager {
 				return false;
 			}
 		} catch (Exception e) {
-			if(e instanceof YSException) {
+			if(e instanceof REDException) {
 				LOGGER.info("短信发送失败："+e.getMessage());
 			} else {
 				LOGGER.warn("短信发送失败："+e.getMessage(), e);

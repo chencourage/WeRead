@@ -5,51 +5,51 @@ package com.weread.common.exception;
  * @author lisheng
  *
  */
-public class YSException extends RuntimeException {
+public class REDException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String errCode = YSErrorCode.SYSTEM_ERR.getCode();
+	private String errCode = REDErrorCode.SYSTEM_ERR.getCode();
 
-	public YSException() {
+	public REDException() {
 		super();
 	}
 
-	public YSException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public REDException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	public YSException(String message, Throwable cause) {
+	public REDException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public YSException(String message) {
+	public REDException(String message) {
 		super(message);
 	}
 
-	public YSException(Throwable cause) {
+	public REDException(Throwable cause) {
 		super(cause);
 	}
 
-	public YSException(String errCode, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public REDException(String errCode, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		this.errCode = errCode;
 	}
 
-	public YSException(String errCode, String message, Throwable cause) {
+	public REDException(String errCode, String message, Throwable cause) {
 		super(message, cause);
 		this.errCode = errCode;
 	}
 
-	public YSException(String errCode, String message) {
+	public REDException(String errCode, String message) {
 		super(message);
 		this.errCode = errCode;
 	}
 	
-	public YSException(YSErrorCode ysErrorCode) {
+	public REDException(REDErrorCode ysErrorCode) {
 		super(ysErrorCode.getMsg());
 		this.errCode = ysErrorCode.getCode();
 	}

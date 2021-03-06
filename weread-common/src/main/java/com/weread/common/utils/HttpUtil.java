@@ -34,8 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
-import com.weread.common.exception.YSErrorCode;
-import com.weread.common.exception.YSException;
+import com.weread.common.exception.REDErrorCode;
+import com.weread.common.exception.REDException;
 
 
 /**
@@ -346,7 +346,7 @@ public class HttpUtil {
 			log.info("http返回参数:" + responseStr);
 		} catch (Exception e) {
 			log.error("系统异常："+e.getMessage(), e);
-			throw new YSException(YSErrorCode.HTTP_ERROR);	
+			throw new REDException(REDErrorCode.HTTP_ERROR);	
 		} finally {
 			if (response != null) {  
                 try {  
@@ -393,7 +393,7 @@ public class HttpUtil {
 			log.debug("http返回参数:" + responseStr);
 		} catch (Exception e) {
 			log.error("系统异常："+e.getMessage(), e);
-			throw new YSException(YSErrorCode.HTTP_ERROR);
+			throw new REDException(REDErrorCode.HTTP_ERROR);
 		} finally {
 			if (response != null) {  
                 try {  
@@ -452,7 +452,7 @@ public class HttpUtil {
 			log.info("http返回参数:" + responseStr);
 		} catch (Exception e) {
 			log.error("系统异常："+e.getMessage(), e);
-			throw new YSException(YSErrorCode.HTTP_ERROR);	
+			throw new REDException(REDErrorCode.HTTP_ERROR);	
 		} finally {
 			if (response != null) {  
                 try {  
@@ -587,7 +587,7 @@ public class HttpUtil {
 //			log.info("http返回参数:" + responseStr);
 		} catch (Exception e) {
 			log.error("系统异常："+e.getMessage(), e);
-			throw new YSException(YSErrorCode.HTTP_ERROR);	
+			throw new REDException(REDErrorCode.HTTP_ERROR);	
 		} finally {
 			if (response != null) {  
                 try {  
@@ -628,7 +628,7 @@ public class HttpUtil {
 //			log.info("http返回参数:" + responseStr);
 		} catch (Exception e) {
 			log.error("系统异常："+e.getMessage(), e);
-			throw new YSException(YSErrorCode.HTTP_ERROR);	
+			throw new REDException(REDErrorCode.HTTP_ERROR);	
 		} finally {
 			if (response != null) {  
                 try {  

@@ -1,8 +1,5 @@
 package com.weread.web.controller;
 
-import com.java2nb.novel.core.bean.UserDetails;
-import com.java2nb.novel.core.utils.CookieUtil;
-import com.java2nb.novel.core.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 

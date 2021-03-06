@@ -10,9 +10,9 @@ import com.weread.common.utils.StringUtil;
  * @author lisheng
  *
  */
-public class YSAssert {
+public class REDAssert {
 	
-	public static final YSErrorCode DEF_ERR_CODE = YSErrorCode.SYSTEM_ERR;
+	public static final REDErrorCode DEF_ERR_CODE = REDErrorCode.SYSTEM_ERR;
 	
 	public static void isTrue(boolean expression, String pattern, Object ... arguments) {
 		isTrue(expression, DEF_ERR_CODE, pattern, arguments);
@@ -39,43 +39,43 @@ public class YSAssert {
 	}
 	
 	
-	public static void isTrue(boolean expression, YSErrorCode errCode, String pattern, Object ... arguments) {
+	public static void isTrue(boolean expression, REDErrorCode errCode, String pattern, Object ... arguments) {
 		if (!expression) {
 			throwYSException(errCode, pattern, arguments);
 		}
 	}
 	
-	public static void notTrue(boolean expression, YSErrorCode errCode, String pattern, Object ... arguments) {
+	public static void notTrue(boolean expression, REDErrorCode errCode, String pattern, Object ... arguments) {
 		if (expression) {
 			throwYSException(errCode, pattern, arguments);
 		}
 	}
 	
-	public static void notNull(Object object, YSErrorCode errCode, String pattern, Object ... arguments) {
+	public static void notNull(Object object, REDErrorCode errCode, String pattern, Object ... arguments) {
 		if (object == null) {
 			throwYSException(errCode, pattern, arguments);
 		}
 	}
 	
-	public static void isNull(Object object, YSErrorCode errCode, String pattern, Object ... arguments) {
+	public static void isNull(Object object, REDErrorCode errCode, String pattern, Object ... arguments) {
 		if (object != null) {
 			throwYSException(errCode, pattern, arguments);
 		}
 	}
 	
-	public static void isBlank(String str, YSErrorCode errCode, String pattern, Object ... arguments) {
+	public static void isBlank(String str, REDErrorCode errCode, String pattern, Object ... arguments) {
 		if (StringUtil.isNotBlank(str)) {
 			throwYSException(errCode, pattern, arguments);
 		}
 	}
 	
-	public static void notBlank(String str, YSErrorCode errCode, String pattern, Object ... arguments) {
+	public static void notBlank(String str, REDErrorCode errCode, String pattern, Object ... arguments) {
 		if (StringUtil.isBlank(str)) {
 			throwYSException(errCode, pattern, arguments);
 		}
 	}
 	
-	private static void throwYSException(YSErrorCode errCode, String pattern, Object ... arguments) {
+	private static void throwYSException(REDErrorCode errCode, String pattern, Object ... arguments) {
 		
 		if(null == errCode) {
 			errCode = DEF_ERR_CODE;
@@ -93,7 +93,7 @@ public class YSAssert {
 			throwMessage = errCode.getMsg();
 		}
 		
-		throw new YSException(errCode.getCode(), throwMessage);
+		throw new REDException(errCode.getCode(), throwMessage);
 	}
 	
 }

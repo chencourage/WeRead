@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author lisheng
  *
  */
-public enum YSErrorCode {
+public enum REDErrorCode {
 	SYSTEM_ERR("9999", "系统繁忙，请稍后重试"),
 	CHECK_ERR("9998", "请求参数校验失败"),
 	VALIDATE_ERR("9997", "业务数据校验失败"),
@@ -32,7 +32,7 @@ public enum YSErrorCode {
 	private String code;
 	private String msg;
 	
-	private YSErrorCode(String code, String msg) {
+	private REDErrorCode(String code, String msg) {
 		this.code = code;
 		this.msg = msg;
 	}
@@ -53,7 +53,7 @@ public enum YSErrorCode {
 		this.msg = msg;
 	}
 	
-	public static String buildCallError(String thirdErrCode, String thirdErrMsg, YSErrorCode errCode, String errMsg) {
+	public static String buildCallError(String thirdErrCode, String thirdErrMsg, REDErrorCode errCode, String errMsg) {
 		return String.format("%s#@#%s#@#%s#@#%s", StringUtils.trimToEmpty(thirdErrCode), StringUtils.trimToEmpty(thirdErrMsg),
 				StringUtils.trimToEmpty(errCode.getCode()), StringUtils.trimToEmpty(errMsg));
 	}
