@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.weread.service.base.req.book.BookSP;
 import com.weread.service.read.entity.Book;
 import com.weread.service.read.vo.BookVO;
@@ -19,7 +20,7 @@ import com.weread.service.read.vo.BookVO;
  */
 public interface BookMapper extends BaseMapper<Book> {
 	
-	List<BookVO> searchByPage(@Param("book")BookSP params);
+	List<BookVO> searchByPage(Page page,@Param("book")BookSP params);
 
     void addVisitCount(@Param("bookId") Long bookId, @Param("visitCount") Integer visitCount);
 

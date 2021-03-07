@@ -1,20 +1,40 @@
 package com.weread.service.read.service.impl;
 
+import static com.java2nb.novel.mapper.BookCategoryDynamicSqlSupport.bookCategory;
+import static com.java2nb.novel.mapper.BookContentDynamicSqlSupport.bookContent;
+import static com.java2nb.novel.mapper.BookDynamicSqlSupport.book;
+import static com.java2nb.novel.mapper.BookDynamicSqlSupport.id;
+import static com.java2nb.novel.mapper.BookIndexDynamicSqlSupport.bookIndex;
+import static org.mybatis.dynamic.sql.SqlBuilder.count;
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import static org.mybatis.dynamic.sql.SqlBuilder.isLessThan;
+import static org.mybatis.dynamic.sql.select.SelectDSL.select;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
+import com.java2nb.novel.mapper.BookCategoryDynamicSqlSupport;
+import com.java2nb.novel.mapper.BookContentDynamicSqlSupport;
+import com.java2nb.novel.mapper.BookIndexDynamicSqlSupport;
 import com.weread.common.base.SystemConfig;
 import com.weread.common.redis.IRedisService;
 import com.weread.common.utils.JsonUtil;
+import com.weread.common.utils.StringUtil;
 import com.weread.service.base.BaseService;
 import com.weread.service.base.req.book.BookSP;
 import com.weread.service.read.entity.Book;
@@ -25,11 +45,16 @@ import com.weread.service.read.entity.BookIndex;
 import com.weread.service.read.entity.BookSetting;
 import com.weread.service.read.mapper.BookMapper;
 import com.weread.service.read.mapper.BookSettingMapper;
+import com.weread.service.read.service.IBookCategoryService;
+import com.weread.service.read.service.IBookContentService;
+import com.weread.service.read.service.IBookIndexService;
 import com.weread.service.read.service.IBookService;
 import com.weread.service.read.service.IBookSettingService;
 import com.weread.service.read.vo.BookCommentVO;
 import com.weread.service.read.vo.BookSettingVO;
 import com.weread.service.read.vo.BookVO;
+
+import tk.mybatis.orderbyhelper.OrderByHelper;
 
 /**
  * <p>
@@ -53,6 +78,15 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
 	
 	@Autowired
 	private IRedisService redisService;
+	
+	@Autowired
+	private IBookCategoryService bookCategoryService;
+	
+	@Autowired
+	private IBookIndexService bookIndexService;
+	
+	@Autowired
+	private IBookContentService bookContentService;
 
 	@Override
 	public Map<Byte, List<BookSettingVO>> listBookSettingVO() throws Exception {
@@ -113,92 +147,169 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
 
 	@Override
 	public List<Book> listClickRank() {
-		return null;
+		List<Book> result = redisService.getList(SystemConfig.INDEX_CLICK_BANK_BOOK_KEY,Book.class);
+        if (result == null || result.size() == 0) {
+            result = listRank((byte) 0, 10);
+            redisService.setList(SystemConfig.INDEX_CLICK_BANK_BOOK_KEY, result);
+            redisService.expire(SystemConfig.INDEX_CLICK_BANK_BOOK_KEY, 5000, TimeUnit.SECONDS);
+        }
+        return result;
 	}
 
 	@Override
 	public List<Book> listNewRank() {
-		return null;
+		List<Book> result = redisService.getList(SystemConfig.INDEX_NEW_BOOK_KEY,Book.class);
+        if (result == null || result.size() == 0) {
+            result = listRank((byte) 1, 10);
+            redisService.setList(SystemConfig.INDEX_NEW_BOOK_KEY, result);
+            redisService.expire(SystemConfig.INDEX_NEW_BOOK_KEY, 3600, TimeUnit.SECONDS);
+        }
+        return result;
 	}
 
 	@Override
 	public List<BookVO> listUpdateRank() {
-		return null;
+		List<BookVO> result = (List<BookVO>) redisService.getList(SystemConfig.INDEX_UPDATE_BOOK_KEY,BookVO.class);
+        if (result == null || result.size() == 0) {
+            List<Book> bookPOList = listRank((byte) 2, 23);
+            result = BeanUtil.copyList(bookPOList, BookVO.class);
+            redisService.setList(SystemConfig.INDEX_UPDATE_BOOK_KEY, result);
+            redisService.expire(SystemConfig.INDEX_UPDATE_BOOK_KEY, 600, TimeUnit.SECONDS);
+        }
+        return result;
 	}
 
 	@Override
 	public Page<BookVO> searchByPage(BookSP params, int page, int pageSize) {
-		return null;
+		
+		if (params.getUpdatePeriod() != null) {
+            long cur = System.currentTimeMillis();
+            long period = params.getUpdatePeriod() * 24 * 3600 * 1000;
+            long time = cur - period;
+            params.setUpdateTimeMin(new Date(time));
+        }
+		Page<BookVO> pageq = new Page<BookVO>(page,pageSize);
+		List<BookVO> recoders = bookMapper.searchByPage(pageq,params);
+		pageq.setRecords(recoders);
+        return pageq;
 	}
 
 	@Override
 	public List<BookCategory> listBookCategory() {
-		return null;
+		Wrapper<BookCategory> wrapper = new EntityWrapper<BookCategory>();
+		wrapper.orderBy("sort", false);
+		bookCategoryService.selectList(wrapper);
+        return bookCategoryService.selectList(wrapper);
 	}
 
 	@Override
 	public Book queryBookDetail(Long id) {
-		return null;
+        return selectById(id);
 	}
 
 	@Override
 	public List<BookIndex> queryIndexList(Long bookId, String orderBy, Integer page, Integer pageSize) {
-		// TODO Auto-generated method stub
-		return null;
+        Page pageq = new Page(page,pageSize);
+        Wrapper<BookIndex> wrapper = new EntityWrapper<BookIndex>();
+        wrapper.eq("book_id", bookId);
+        if(StringUtil.isNotEmpty(orderBy)){
+        	wrapper.orderBy(orderBy);
+        }
+        bookIndexService.selectPage(pageq,wrapper);
+        return pageq.getRecords();
 	}
 
 	@Override
 	public BookIndex queryBookIndex(Long bookIndexId) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookIndexService.selectById(bookIndexId);
 	}
 
 	@Override
 	public Long queryPreBookIndexId(Long bookId, Integer indexNum) {
-		// TODO Auto-generated method stub
-		return null;
+        Wrapper<BookIndex> wrapper = new EntityWrapper<BookIndex>();
+        wrapper.eq("book_id", bookId);
+        wrapper.lt("index_num", indexNum);
+        wrapper.orderBy("index_num", false);
+        wrapper.last("limit 1");
+        List<BookIndex> list = bookIndexService.selectList(wrapper);
+        if (list.size() == 0) {
+            return 0L;
+        } else {
+            return list.get(0).getId();
+        }
 	}
 
 	@Override
 	public Long queryNextBookIndexId(Long bookId, Integer indexNum) {
-		// TODO Auto-generated method stub
-		return null;
+		Wrapper<BookIndex> wrapper = new EntityWrapper<BookIndex>();
+        wrapper.eq("book_id", bookId);
+        wrapper.gt("index_num", indexNum);
+        wrapper.orderBy("index_num",true);
+        wrapper.last("limit 1");
+        List<BookIndex> list = bookIndexService.selectList(wrapper);
+        if (list.size() == 0) {
+            return 0L;
+        } else {
+            return list.get(0).getId();
+        }
 	}
 
 	@Override
 	public BookContent queryBookContent(Long bookIndexId) {
-		// TODO Auto-generated method stub
-		return null;
+		Wrapper<BookContent> wrapper = new EntityWrapper<BookContent>();
+		wrapper.eq("index_id", bookIndexId);
+		wrapper.last("limit 1");
+		List<BookContent> contentList = bookContentService.selectList(wrapper);
+		if (contentList.size() == 0) {
+            return null;
+        } else {
+            return contentList.get(0);
+        }
 	}
 
 	@Override
 	public List<Book> listRank(Byte type, Integer limit) {
-		// TODO Auto-generated method stub
-		return null;
+        Wrapper<Book> wrapper = new EntityWrapper<Book>();
+        wrapper.gt("word_count", 0);
+        if(type == 1){
+        	wrapper.orderBy("create_time",false);
+        }else if(type == 2){
+        	wrapper.orderBy("last_index_update_time",false);
+        }else if(type == 3){
+        	wrapper.orderBy("comment_count",false);
+        }
+        return this.selectList(wrapper);
 	}
 
 	@Override
 	public void addVisitCount(Long bookId, Integer visitCount) {
-		// TODO Auto-generated method stub
-		
+		bookMapper.addVisitCount(bookId, visitCount);
 	}
 
 	@Override
 	public long queryIndexCount(Long bookId) {
-		// TODO Auto-generated method stub
-		return 0;
+		Wrapper<BookIndex> wrapper = new EntityWrapper<BookIndex>();
+		wrapper.eq("book_id", bookId);
+        return bookIndexService.selectCount(wrapper);
 	}
 
 	@Override
 	public List<Book> listRecBookByCatId(Integer catId) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookMapper.listRecBookByCatId(catId);
 	}
 
 	@Override
 	public Long queryFirstBookIndexId(Long bookId) {
-		// TODO Auto-generated method stub
-		return null;
+		Wrapper<BookIndex> wrapper = new EntityWrapper<BookIndex>();
+		wrapper.eq("book_id", bookId);
+		wrapper.orderBy("index_num");
+		wrapper.last("limit 1");
+		List<BookIndex> list = bookIndexService.selectList(wrapper);
+		if (list.size() == 0) {
+            return 0L;
+        } else {
+            return list.get(0).getId();
+        }
 	}
 
 	@Override
