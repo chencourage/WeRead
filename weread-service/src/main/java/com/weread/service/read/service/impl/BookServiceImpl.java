@@ -23,6 +23,7 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -32,6 +33,7 @@ import com.java2nb.novel.mapper.BookCategoryDynamicSqlSupport;
 import com.java2nb.novel.mapper.BookContentDynamicSqlSupport;
 import com.java2nb.novel.mapper.BookIndexDynamicSqlSupport;
 import com.weread.common.base.SystemConfig;
+import com.weread.common.exception.REDException;
 import com.weread.common.redis.IRedisService;
 import com.weread.common.utils.JsonUtil;
 import com.weread.common.utils.StringUtil;
@@ -46,6 +48,7 @@ import com.weread.service.read.entity.BookSetting;
 import com.weread.service.read.mapper.BookMapper;
 import com.weread.service.read.mapper.BookSettingMapper;
 import com.weread.service.read.service.IBookCategoryService;
+import com.weread.service.read.service.IBookCommentService;
 import com.weread.service.read.service.IBookContentService;
 import com.weread.service.read.service.IBookIndexService;
 import com.weread.service.read.service.IBookService;
@@ -53,8 +56,6 @@ import com.weread.service.read.service.IBookSettingService;
 import com.weread.service.read.vo.BookCommentVO;
 import com.weread.service.read.vo.BookSettingVO;
 import com.weread.service.read.vo.BookVO;
-
-import tk.mybatis.orderbyhelper.OrderByHelper;
 
 /**
  * <p>
@@ -87,6 +88,9 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
 	
 	@Autowired
 	private IBookContentService bookContentService;
+	
+	@Autowired
+	private IBookCommentService bookCommentService;
 
 	@Override
 	public Map<Byte, List<BookSettingVO>> listBookSettingVO() throws Exception {
@@ -314,20 +318,72 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
 
 	@Override
 	public List<BookCommentVO> listCommentByPage(Long userId, Long bookId, int page, int pageSize) {
-		// TODO Auto-generated method stub
+		/*PageHelper.startPage(page, pageSize);
+        OrderByHelper.orderBy("t1.create_time desc");
+        return bookCommentMapper.listCommentByPage(userId, bookId);*/
+		
 		return null;
 	}
 
 	@Override
 	public void addBookComment(Long userId, BookComment comment) {
-		// TODO Auto-generated method stub
+		//判断该用户是否已评论过该书籍
+        /*SelectStatementProvider selectStatement = select(count(BookCommentDynamicSqlSupport.id))
+                .from(bookComment)
+                .where(BookCommentDynamicSqlSupport.createUserId, isEqualTo(userId))
+                .and(BookCommentDynamicSqlSupport.bookId, isEqualTo(comment.getBookId()))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        if (bookCommentMapper.count(selectStatement) > 0) {
+            throw new BusinessException(ResponseStatus.HAS_COMMENTS);
+        }
+        //增加评论
+        comment.setCreateUserId(userId);
+        comment.setCreateTime(new Date());
+        bookCommentMapper.insertSelective(comment);
+        //增加书籍评论数
+        bookMapper.addCommentCount(comment.getBookId());*/
+		
+		Wrapper<BookComment> wrapper = new EntityWrapper<BookComment>();
+		wrapper.eq("create_user_id", userId);
+		wrapper.eq("book_id", comment.getBookId());
+		int count = bookCommentService.selectCount(wrapper);
+		if(count>0) {
+			throw new REDException("您已经评论过！");
+		}
+		comment.setCreateUserId(userId);
+		comment.setCreateTime(new Date());
+		bookCommentService.insert(comment);
+		bookMapper.addCommentCount(comment.getBookId());
 		
 	}
 
 	@Override
 	public Long getOrCreateAuthorIdByName(String authorName, Byte workDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		Long authorId;
+        /*SelectStatementProvider selectStatement = select(BookAuthorDynamicSqlSupport.id)
+                .from(BookAuthorDynamicSqlSupport.bookAuthor)
+                .where(BookAuthorDynamicSqlSupport.penName, isEqualTo(authorName))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        List<BookAuthor> bookAuthors = bookAuthorMapper.selectMany(selectStatement);
+        if (bookAuthors.size() > 0) {
+            //作者存在
+            authorId = bookAuthors.get(0).getId();
+        } else {
+            //作者不存在，先创建作者
+            Date currentDate = new Date();
+            authorId = new IdWorker().nextId();
+            BookAuthor bookAuthor = new BookAuthor();
+            bookAuthor.setId(authorId);
+            bookAuthor.setPenName(authorName);
+            bookAuthor.setWorkDirection(workDirection);
+            bookAuthor.setStatus((byte) 1);
+            bookAuthor.setCreateTime(currentDate);
+            bookAuthor.setUpdateTime(currentDate);
+            bookAuthorMapper.insertSelective(bookAuthor);
+        }
+        return authorId;*/
 	}
 
 	@Override
