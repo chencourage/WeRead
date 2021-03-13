@@ -16,5 +16,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrderPayServiceImpl extends BaseService<OrderPayMapper, OrderPay> implements IOrderPayService {
+
+	@Override
+	public Long createPayOrder(Byte payChannel, Integer payAmount, Long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updatePayOrder(Long outTradeNo, String tradeNo, String tradeStatus) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

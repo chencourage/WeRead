@@ -14,6 +14,10 @@ import com.java2nb.novel.service.FriendLinkService;
 import com.java2nb.novel.service.NewsService;
 import com.weread.common.base.ResponseStatus;
 import com.weread.common.model.ResultBean;
+import com.weread.common.redis.IRedisService;
+import com.weread.service.read.service.IBookService;
+import com.weread.service.read.service.IFriendLinkService;
+import com.weread.service.read.service.INewsService;
 
 /**
  * @author 11797
@@ -25,13 +29,13 @@ public class CacheController {
     @Value("${cache.manager.password}")
     private String cacheManagerPass;
     @Autowired
-    private CacheService cacheService;
+    private IRedisService cacheService;
     @Autowired
-    private BookService bookService;
+    private IBookService bookService;
     @Autowired
-    private NewsService newsService;
+    private INewsService newsService;
     @Autowired
-    private FriendLinkService friendLinkService;
+    private IFriendLinkService friendLinkService;
 
     /**
      * 刷新缓存

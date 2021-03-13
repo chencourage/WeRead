@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.weread.common.base.ResponseStatus;
 import com.weread.common.model.ResultBean;
 import com.weread.common.model.UserDetails;
+import com.weread.common.redis.IRedisService;
 import com.weread.service.read.entity.User;
 import com.weread.service.read.entity.UserBuyRecord;
 import com.weread.service.read.service.IBookService;
@@ -35,7 +36,7 @@ public class UserController extends BaseController {
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 	@Autowired
-    private CacheService cacheService;
+    private IRedisService cacheService;
 	@Autowired
     private IUserService userService;
 	@Autowired
@@ -234,8 +235,7 @@ public class UserController extends BaseController {
         }
         return ResultBean.ok();
     }
-
-
+    
     /**
      * 更新密码
      * @throws Exception 
@@ -265,7 +265,6 @@ public class UserController extends BaseController {
         return ResultBean.ok(new PageInfo<>(bookService.listCommentByPage(userDetails.getId(),null,page,pageSize)));
     }
 
-
     /**
      * 购买小说章节
      * */
@@ -279,9 +278,4 @@ public class UserController extends BaseController {
         userService.buyBookIndex(userDetails.getId(),buyRecord);
         return ResultBean.ok();
     }
-
-
-
-
-
 }

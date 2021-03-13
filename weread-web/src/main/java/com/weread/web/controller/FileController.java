@@ -24,6 +24,7 @@ import com.java2nb.novel.core.cache.CacheService;
 import com.java2nb.novel.core.utils.Constants;
 import com.java2nb.novel.core.utils.RandomValidateCodeUtil;
 import com.java2nb.novel.core.utils.UUIDUtil;
+import com.weread.common.redis.IRedisService;
 
 /**
  * @author 11797
@@ -35,7 +36,7 @@ public class FileController {
 	Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
-    private CacheService cacheService;
+    private IRedisService cacheService;
 
     @Value("${pic.save.path}")
     private String picSavePath;
