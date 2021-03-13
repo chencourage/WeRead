@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.java2nb.novel.service.NewsService;
 import com.weread.common.model.ResultBean;
+import com.weread.service.read.service.INewsService;
 
 /**
  * @author 11797
@@ -21,7 +22,7 @@ public class NewsController {
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 	@Autowired
-    private NewsService newsService;
+    private INewsService newsService;
 
     /**
      * 查询首页新闻

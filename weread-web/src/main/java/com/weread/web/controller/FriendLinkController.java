@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.java2nb.novel.service.FriendLinkService;
 import com.weread.common.model.ResultBean;
+import com.weread.service.read.service.IFriendLinkService;
 
 /**
  * @author 11797
@@ -19,7 +20,7 @@ public class FriendLinkController {
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 	@Autowired
-    private FriendLinkService friendLinkService;
+    private IFriendLinkService friendLinkService;
 
     /**
      * 查询首页友情链接

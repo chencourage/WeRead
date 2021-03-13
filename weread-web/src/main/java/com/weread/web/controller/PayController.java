@@ -22,6 +22,7 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.java2nb.novel.core.config.AlipayConfig;
 import com.java2nb.novel.service.OrderService;
 import com.weread.common.model.UserDetails;
+import com.weread.service.read.service.IOrderPayService;
 
 /**
  * @author 11797
@@ -35,7 +36,7 @@ public class PayController extends BaseController {
 	@Autowired
     private AlipayConfig alipayConfig;
 	@Autowired
-    private OrderService orderService;
+    private IOrderPayService orderService;
 
     /**
      * 支付宝支付
