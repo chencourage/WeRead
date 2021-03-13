@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.java2nb.novel.core.bean.ResultBean;
-import com.java2nb.novel.core.cache.CacheService;
-import com.java2nb.novel.core.utils.Constants;
-import com.java2nb.novel.core.utils.RandomValidateCodeUtil;
-import com.java2nb.novel.core.utils.UUIDUtil;
+import com.weread.common.base.SystemConfig;
+import com.weread.common.model.ResultBean;
 import com.weread.common.redis.IRedisService;
+import com.weread.common.utils.UUIDUtil;
 
 /**
  * @author 11797
@@ -70,7 +68,7 @@ public class FileController {
         Date currentDate = new Date();
         try {
             String savePath =
-                    Constants.LOCAL_PIC_PREFIX + DateUtils.formatDate(currentDate, "yyyy") + "/" +
+                    SystemConfig.LOCAL_PIC_PREFIX + DateUtils.formatDate(currentDate, "yyyy") + "/" +
                     DateUtils.formatDate(currentDate, "MM") + "/" +
                     DateUtils.formatDate(currentDate, "dd") ;
             String oriName = file.getOriginalFilename();

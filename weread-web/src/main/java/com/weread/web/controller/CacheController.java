@@ -1,6 +1,5 @@
 package com.weread.web.controller;
 
-import org.apache.ibatis.cache.CacheKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,11 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.java2nb.novel.core.cache.CacheService;
-import com.java2nb.novel.service.BookService;
-import com.java2nb.novel.service.FriendLinkService;
-import com.java2nb.novel.service.NewsService;
 import com.weread.common.base.ResponseStatus;
+import com.weread.common.base.SystemConfig;
 import com.weread.common.model.ResultBean;
 import com.weread.common.redis.IRedisService;
 import com.weread.service.read.service.IBookService;
@@ -50,19 +46,19 @@ public class CacheController {
         switch (type){
             case 1:{
                 //刷新首页推荐书籍缓存
-                cacheService.del(CacheKey.INDEX_BOOK_SETTINGS_KEY);
+                cacheService.del(SystemConfig.INDEX_BOOK_SETTINGS_KEY);
                 bookService.listBookSettingVO();
                 break;
             }
             case 2:{
                 //刷新首页新闻缓存
-                cacheService.del(CacheKey.INDEX_NEWS_KEY);
+                cacheService.del(SystemConfig.INDEX_NEWS_KEY);
                 newsService.listIndexNews();
                 break;
             }
             case 3:{
                 //刷新首页友情链接
-                cacheService.del(CacheKey.INDEX_LINK_KEY);
+                cacheService.del(SystemConfig.INDEX_LINK_KEY);
                 friendLinkService.listIndexLink();
                 break;
             }
