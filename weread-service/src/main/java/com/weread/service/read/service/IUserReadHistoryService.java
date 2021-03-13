@@ -1,7 +1,11 @@
 package com.weread.service.read.service;
 
-import com.weread.service.read.entity.UserReadHistory;
+import java.util.List;
+
+import com.baomidou.mybatisplus.plugins.Page;
 import com.weread.service.base.IBaseService;
+import com.weread.service.read.entity.UserReadHistory;
+import com.weread.service.read.vo.BookReadHistoryVO;
 
 /**
  * <p>
@@ -12,5 +16,5 @@ import com.weread.service.base.IBaseService;
  * @since 2021-02-28
  */
 public interface IUserReadHistoryService extends IBaseService<UserReadHistory> {
-	
+	public List<BookReadHistoryVO> listReadHistory(Page page,Long userId);
 }

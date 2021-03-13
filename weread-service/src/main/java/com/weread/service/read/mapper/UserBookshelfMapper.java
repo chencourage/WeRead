@@ -1,7 +1,13 @@
 package com.weread.service.read.mapper;
 
-import com.weread.service.read.entity.UserBookshelf;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.weread.service.read.entity.UserBookshelf;
+import com.weread.service.read.vo.BookShelfVO;
 
 /**
  * <p>
@@ -12,5 +18,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2021-02-28
  */
 public interface UserBookshelfMapper extends BaseMapper<UserBookshelf> {
+	
+	List<BookShelfVO> listBookShelf(@Param("page")Page page,@Param("userId") Long userId);
 
 }

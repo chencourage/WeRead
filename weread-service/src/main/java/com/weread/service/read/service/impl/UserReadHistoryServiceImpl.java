@@ -1,10 +1,16 @@
 package com.weread.service.read.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.plugins.Page;
+import com.weread.service.base.BaseService;
 import com.weread.service.read.entity.UserReadHistory;
 import com.weread.service.read.mapper.UserReadHistoryMapper;
 import com.weread.service.read.service.IUserReadHistoryService;
-import com.weread.service.base.BaseService;
-import org.springframework.stereotype.Service;
+import com.weread.service.read.vo.BookReadHistoryVO;
 
 /**
  * <p>
@@ -16,5 +22,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserReadHistoryServiceImpl extends BaseService<UserReadHistoryMapper, UserReadHistory> implements IUserReadHistoryService {
+
+	@Autowired
+	private UserReadHistoryMapper userReadHistoryMapper;
+	
+	@Override
+	public List<BookReadHistoryVO> listReadHistory(Page page, Long userId) {
+		return userReadHistoryMapper.listReadHistory(page, userId);
+	}
 	
 }

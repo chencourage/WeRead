@@ -1,7 +1,11 @@
 package com.weread.service.read.service;
 
-import com.weread.service.read.entity.UserBookshelf;
+import java.util.List;
+
+import com.baomidou.mybatisplus.plugins.Page;
 import com.weread.service.base.IBaseService;
+import com.weread.service.read.entity.UserBookshelf;
+import com.weread.service.read.vo.BookShelfVO;
 
 /**
  * <p>
@@ -12,5 +16,5 @@ import com.weread.service.base.IBaseService;
  * @since 2021-02-28
  */
 public interface IUserBookshelfService extends IBaseService<UserBookshelf> {
-	
+	List<BookShelfVO> listBookShelf(Page page,Long userId);
 }

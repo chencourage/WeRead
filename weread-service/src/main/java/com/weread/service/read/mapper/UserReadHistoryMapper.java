@@ -1,7 +1,13 @@
 package com.weread.service.read.mapper;
 
-import com.weread.service.read.entity.UserReadHistory;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.weread.service.read.entity.UserReadHistory;
+import com.weread.service.read.vo.BookReadHistoryVO;
 
 /**
  * <p>
@@ -12,5 +18,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2021-02-28
  */
 public interface UserReadHistoryMapper extends BaseMapper<UserReadHistory> {
+	
+	public List<BookReadHistoryVO> listReadHistory(@Param("page")Page page,@Param("userId") Long userId);
 
 }

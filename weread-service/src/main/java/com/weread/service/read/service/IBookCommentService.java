@@ -1,7 +1,10 @@
 package com.weread.service.read.service;
 
-import com.weread.service.read.entity.BookComment;
+import java.util.List;
+
 import com.weread.service.base.IBaseService;
+import com.weread.service.read.entity.BookComment;
+import com.weread.service.read.vo.BookCommentVO;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.weread.service.base.IBaseService;
  * @since 2021-02-28
  */
 public interface IBookCommentService extends IBaseService<BookComment> {
+	
+	List<BookCommentVO> listCommentByPage(Long userId,Long bookId);
 	
 }
