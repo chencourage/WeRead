@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.java2nb.novel.core.bean.ResultBean;
 import com.java2nb.novel.service.FriendLinkService;
+import com.weread.common.model.ResultBean;
 
 /**
  * @author 11797

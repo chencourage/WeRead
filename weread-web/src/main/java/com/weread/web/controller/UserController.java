@@ -18,18 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
-import com.java2nb.novel.core.bean.ResultBean;
-import com.java2nb.novel.core.bean.UserDetails;
-import com.java2nb.novel.core.cache.CacheService;
-import com.java2nb.novel.core.enums.ResponseStatus;
-import com.java2nb.novel.core.utils.RandomValidateCodeUtil;
-import com.java2nb.novel.core.valid.AddGroup;
-import com.java2nb.novel.core.valid.UpdateGroup;
-import com.java2nb.novel.entity.User;
-import com.java2nb.novel.entity.UserBuyRecord;
-import com.java2nb.novel.service.BookService;
-import com.java2nb.novel.service.UserService;
+import com.weread.common.base.ResponseStatus;
+import com.weread.common.model.ResultBean;
+import com.weread.common.model.UserDetails;
+import com.weread.service.read.entity.User;
+import com.weread.service.read.entity.UserBuyRecord;
+import com.weread.service.read.service.IBookService;
+import com.weread.service.read.service.IUserService;
 
 /**
  * @author 11797
@@ -42,9 +37,9 @@ public class UserController extends BaseController {
 	@Autowired
     private CacheService cacheService;
 	@Autowired
-    private UserService userService;
+    private IUserService userService;
 	@Autowired
-    private BookService bookService;
+    private IBookService bookService;
 
     /**
      * 登陆

@@ -5,9 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
-import com.java2nb.novel.core.bean.ResultBean;
-import com.java2nb.novel.core.bean.UserDetails;
-import com.java2nb.novel.core.enums.ResponseStatus;
-import com.java2nb.novel.entity.BookComment;
-import com.java2nb.novel.search.BookSP;
-import com.java2nb.novel.service.BookService;
-import com.java2nb.novel.vo.BookVO;
+import com.weread.common.base.ResponseStatus;
+import com.weread.common.model.ResultBean;
+import com.weread.common.model.UserDetails;
+import com.weread.service.base.req.book.BookSP;
+import com.weread.service.read.entity.BookComment;
 import com.weread.service.read.service.IBookService;
+import com.weread.service.read.vo.BookVO;
 
 /**
  * @author 11797
@@ -107,11 +104,7 @@ public class BookController extends BaseController{
      * */
     @PostMapping("addVisitCount")
     public ResultBean addVisitCount(Long bookId){
-        if(enableMq == 1) {
-            rabbitTemplate.convertAndSend("ADD-BOOK-VISIT-EXCHANGE", null, bookId);
-        }else {
-            bookService.addVisitCount(bookId, 1);
-        }
+        bookService.addVisitCount(bookId, 1);
         return ResultBean.ok();
     }
 

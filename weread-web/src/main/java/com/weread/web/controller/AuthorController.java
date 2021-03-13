@@ -5,16 +5,18 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.weread.common.base.ResponseStatus;
+import com.weread.common.exception.REDException;
+import com.weread.common.model.ResultBean;
+import com.weread.common.model.UserDetails;
 import com.weread.service.read.entity.Author;
 import com.weread.service.read.entity.Book;
 import com.weread.service.read.service.IAuthorService;
@@ -191,28 +193,17 @@ public class AuthorController extends BaseController{
     }
 
     private Author checkAuthor(HttpServletRequest request) {
-
         UserDetails userDetails = getUserDetails(request);
         if (userDetails == null) {
-            throw new BusinessException(ResponseStatus.NO_LOGIN);
+            throw new REDException(ResponseStatus.NO_LOGIN.getMsg());
         }
-
         //查询作家信息
         Author author = authorService.queryAuthor(userDetails.getId());
-
         //判断作者状态是否正常
         if (author.getStatus() == 1) {
             //封禁状态，不能发布小说
-            throw new BusinessException(ResponseStatus.AUTHOR_STATUS_FORBIDDEN);
+            throw new REDException(ResponseStatus.AUTHOR_STATUS_FORBIDDEN.getMsg());
         }
-
-
         return author;
-
-
     }
-
-
-
-
 }

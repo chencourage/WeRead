@@ -1,6 +1,5 @@
 package com.weread.service.read.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,9 +7,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -20,6 +19,7 @@ import com.weread.common.base.ResponseStatus;
 import com.weread.common.base.SystemConfig;
 import com.weread.common.exception.REDException;
 import com.weread.common.redis.IRedisService;
+import com.weread.common.utils.BeanUtil;
 import com.weread.common.utils.JsonUtil;
 import com.weread.common.utils.StringUtil;
 import com.weread.service.base.BaseService;
@@ -34,6 +34,7 @@ import com.weread.service.read.entity.BookIndex;
 import com.weread.service.read.entity.BookSetting;
 import com.weread.service.read.mapper.BookMapper;
 import com.weread.service.read.mapper.BookSettingMapper;
+import com.weread.service.read.service.FileService;
 import com.weread.service.read.service.IAuthorService;
 import com.weread.service.read.service.IBookAuthorService;
 import com.weread.service.read.service.IBookCategoryService;
@@ -88,6 +89,12 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
 	
 	@Autowired
 	private IAuthorService authorService;
+	
+	@Autowired
+	private FileService fileService;
+	
+	@Value("")
+	private String picSavePath;
 	
 	@Override
 	public Map<Byte, List<BookSettingVO>> listBookSettingVO() throws Exception {
@@ -604,8 +611,8 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
         Date currentDate = new Date();
         int wordCount = content.length();//StringUtil.getStrValidWordCount(content);
         
-        int bookPrice = new BigDecimal(wordCount).divide(bookPriceConfig.getWordCount()).multiply(bookPriceConfig.getValue()).intValue();
-        
+        //int bookPrice = new BigDecimal(wordCount).divide(bookPriceConfig.getWordCount()).multiply(bookPriceConfig.getValue()).intValue();
+        int bookPrice = 0;
         int indexNum = queryBookIndex(book.getLastIndexId()).getIndexNum() + 1;
         BookIndex lastBookIndex = new BookIndex();
         //lastBookIndex.setId(lastIndexId);
@@ -913,8 +920,8 @@ public class BookServiceImpl extends BaseService<BookMapper, Book> implements IB
             int wordCount = StringUtil.getStrValidWordCount(content);
 
             //计算价格
-            int bookPrice = new BigDecimal(wordCount).divide(bookPriceConfig.getWordCount()).multiply(bookPriceConfig.getValue()).intValue();
-            
+            //int bookPrice = new BigDecimal(wordCount).divide(bookPriceConfig.getWordCount()).multiply(bookPriceConfig.getValue()).intValue();
+            int bookPrice = 0;
             bookIndex.setIndexName(indexName);
             bookIndex.setWordCount(wordCount);
             bookIndex.setBookPrice(bookPrice);

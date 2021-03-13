@@ -1,5 +1,6 @@
 package com.weread.web.controller;
 
+import org.apache.ibatis.cache.CacheKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,13 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.java2nb.novel.core.bean.ResultBean;
-import com.java2nb.novel.core.cache.CacheKey;
 import com.java2nb.novel.core.cache.CacheService;
-import com.java2nb.novel.core.enums.ResponseStatus;
 import com.java2nb.novel.service.BookService;
 import com.java2nb.novel.service.FriendLinkService;
 import com.java2nb.novel.service.NewsService;
+import com.weread.common.base.ResponseStatus;
+import com.weread.common.model.ResultBean;
 
 /**
  * @author 11797

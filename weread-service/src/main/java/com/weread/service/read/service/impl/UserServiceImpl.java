@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.codec.Charsets;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -15,6 +14,8 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.weread.common.base.ResponseStatus;
 import com.weread.common.exception.REDException;
+import com.weread.common.model.UserDetails;
+import com.weread.common.utils.BeanUtil;
 import com.weread.common.utils.MD5Util;
 import com.weread.common.utils.StringUtil;
 import com.weread.service.base.BaseService;
@@ -83,7 +84,7 @@ public class UserServiceImpl extends BaseService<UserMapper, User> implements IU
         this.insert(entity);
         //生成UserDetail对象并返回
         UserDetails userDetails = new UserDetails();
-        userDetails.setId(id);
+        userDetails.setId(entity.getId());
         userDetails.setUsername(entity.getUsername());
         userDetails.setNickName(entity.getNickName());
         return userDetails;
@@ -207,7 +208,7 @@ public class UserServiceImpl extends BaseService<UserMapper, User> implements IU
 		Wrapper<UserFeedback> feedBackWrapper = new EntityWrapper<UserFeedback>();
 		feedBackWrapper.eq("user_id", userId);
 		Page<UserFeedback> feedBackList = userFeedbackService.selectPage(pageq,feedBackWrapper);
-		return BeanUtil.copyList(feedBackList,UserFeedbackVO.class);;
+		return BeanUtil.copyList(feedBackList.getRecords(),UserFeedbackVO.class);
 	}
 
 	@Override

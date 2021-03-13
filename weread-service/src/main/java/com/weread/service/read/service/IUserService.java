@@ -3,8 +3,7 @@ package com.weread.service.read.service;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
+import com.weread.common.model.UserDetails;
 import com.weread.service.base.IBaseService;
 import com.weread.service.read.entity.User;
 import com.weread.service.read.entity.UserBuyRecord;

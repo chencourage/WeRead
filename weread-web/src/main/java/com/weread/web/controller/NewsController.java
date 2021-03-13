@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
-import com.java2nb.novel.core.bean.ResultBean;
 import com.java2nb.novel.service.NewsService;
+import com.weread.common.model.ResultBean;
 
 /**
  * @author 11797

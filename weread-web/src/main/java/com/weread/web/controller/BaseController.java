@@ -3,6 +3,8 @@ package com.weread.web.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.weread.common.model.UserDetails;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
